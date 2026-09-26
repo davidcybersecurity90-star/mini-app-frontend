@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>AI Ассистент</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-avatar">🤖</div>
+        <div class="header-info">
+            <div class="name">AI Ассистент</div>
+            <div class="status">
+                <span class="status-dot"></span>
+                <span>Онлайн</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="roles-scroll" id="roles"></div>
+
+    <div class="chat" id="chat"></div>
+
+    <div class="actions-bar">
+        <button class="action-btn" onclick="tg.sendData(JSON.stringify({type: 'reset'}))">
+            🧹 Очистить
+        </button>
+        <button class="action-btn primary" onclick="tg.close()">
+            💬 К диалогу
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

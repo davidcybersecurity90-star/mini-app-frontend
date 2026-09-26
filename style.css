@@ -1,0 +1,260 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: var(--tg-theme-bg-color, #0f0f14);
+    --bg-secondary: var(--tg-theme-secondary-bg-color, #1a1a22);
+    --text: var(--tg-theme-text-color, #ffffff);
+    --hint: var(--tg-theme-hint-color, #8a8a96);
+    --accent: var(--tg-theme-button-color, #6c5ce7);
+    --accent-text: var(--tg-theme-button-text-color, #ffffff);
+    --user-bubble: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    --assistant-bubble: #23232e;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== ШАПКА ===== */
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+}
+
+.header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--user-bubble);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(108, 92, 231, 0); }
+}
+
+.header-info .name {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.header-info .status {
+    font-size: 12px;
+    color: var(--hint);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2ecc71;
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ===== ВЫБОР РОЛИ (горизонтальный скролл карточек) ===== */
+
+.roles-scroll {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.roles-scroll::-webkit-scrollbar { display: none; }
+
+.role-chip {
+    flex-shrink: 0;
+    background: var(--bg-secondary);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease;
+    white-space: nowrap;
+}
+
+.role-chip:active {
+    transform: scale(0.95);
+}
+
+.role-chip.active {
+    background: var(--user-bubble);
+    border-color: transparent;
+}
+
+/* ===== ЛЕНТА СООБЩЕНИЙ ===== */
+
+.chat {
+    flex: 1;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.message-row {
+    display: flex;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: message-in 0.35s ease forwards;
+}
+
+@keyframes message-in {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-row.user {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 78%;
+    padding: 11px 15px;
+    border-radius: 18px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    word-wrap: break-word;
+}
+
+.message-row.user .bubble {
+    background: var(--user-bubble);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+}
+
+.message-row.assistant .bubble {
+    background: var(--assistant-bubble);
+    border-bottom-left-radius: 4px;
+}
+
+/* ===== ИНДИКАТОР "ПЕЧАТАЕТ" ===== */
+
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 14px 16px;
+    background: var(--assistant-bubble);
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    width: fit-content;
+}
+
+.typing-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--hint);
+    animation: typing-bounce 1.2s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* ===== ПУСТОЕ СОСТОЯНИЕ / ЗАГРУЗКА ===== */
+
+.state-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--hint);
+    padding: 40px;
+    text-align: center;
+}
+
+.spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.state-icon {
+    font-size: 36px;
+    opacity: 0.6;
+}
+
+/* ===== НИЖНЯЯ ПАНЕЛЬ ДЕЙСТВИЙ ===== */
+
+.actions-bar {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.action-btn {
+    flex: 1;
+    background: var(--bg-secondary);
+    border: none;
+    color: var(--text);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.action-btn:active { opacity: 0.6; }
+
+.action-btn.primary {
+    background: var(--user-bubble);
+    color: #fff;
+}
